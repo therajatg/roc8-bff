@@ -1,0 +1,4 @@
+This is a static file.
+In public folder we can have pdf's
+can also have CSS file here
+files have more prcedence (if name same as url)
