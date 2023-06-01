@@ -1,7 +1,10 @@
+import * as dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import path from "path";
 import { create } from "express-handlebars";
 import { ifEquality } from "./views/helpers/ifEquality";
+import { studentsRouter } from "./routers/studentsRouter";
 
 const app = express();
 
@@ -61,6 +64,8 @@ app.get("/admin-login", (req, res) => {
     formTitle: "Admin Login",
   });
 });
+
+app.use("/api/students", studentsRouter);
 
 app.get("admin-login");
 
