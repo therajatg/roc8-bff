@@ -14,11 +14,10 @@ async function adminSeed() {
       VALUES ('test@gmail.com', '123456')
     `);
   });
-
   console.log("Admin data seeded.");
 }
 
-// New teacher data
+// New teacher datasql
 const newTeacher = {
   firstName: "Dani",
   lastName: "Akash",
