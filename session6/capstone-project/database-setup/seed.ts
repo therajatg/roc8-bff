@@ -1,5 +1,6 @@
 import { createPool, sql } from "slonik";
 import * as dotenv from "dotenv";
+import { hash } from "../utils/hash";
 dotenv.config();
 
 // Function to seed admin data
@@ -11,7 +12,7 @@ async function adminSeed() {
     await connection.query(sql.unsafe`DELETE FROM admin`);
     await connection.query(sql.unsafe`
       INSERT INTO admin (email, password)
-      VALUES ('test@gmail.com', '123456')
+      VALUES ('test@gmail.com', ${hash("123456")})
     `);
   });
   console.log("Admin data seeded.");

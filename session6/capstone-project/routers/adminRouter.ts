@@ -25,6 +25,7 @@ adminRouter.post("/login", async (req, res) => {
         email,
       });
       res.cookie("jwt", token, { httpOnly: true });
+      res.redirect("/");
     } else {
       res.status(400).send("Invalid User");
     }

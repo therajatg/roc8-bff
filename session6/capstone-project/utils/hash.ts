@@ -25,3 +25,5 @@ export const compareHash = (plainText: string, existingHash: string) => {
   const result = bcrypt.compareSync(plainText, existingHash);
   return result;
 };
+
+//instead of writing the below files as they are written (in the sync manner) use async-await or something like that. They are written in the sync manner here because dany wanted to keep things simple for us otherwise he has to write async-await everywhere he imports these 2 things everywhere.

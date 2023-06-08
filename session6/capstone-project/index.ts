@@ -7,9 +7,10 @@ import { ifEquality } from "./views/helpers/ifEquality";
 import { studentsRouter } from "./routers/studentsRouter";
 import { adminRouter } from "./routers/adminRouter";
 import cookieParser from "cookie-parser";
+import { passiveAuth } from "./middlewares/passiveAuth";
+import { gatedAccess } from "./middlewares/gatedAccess";
 
 import bodyParser from "body-parser";
-import { verify } from "./utils/jwtservice";
 
 const app = express();
 
@@ -26,25 +27,24 @@ app.set("view engine", ".hbs");
 //default view directory
 app.set("views", path.join(__dirname, "./views"));
 
-app.use((req, res, next) => {
-  const jwtCookie = req.cookies.jwt;
-  const payload = verify(jwtCookie);
-  if (payload) {
-    req.jwt = payload;
-    next();
-  } else {
-    res.redirect("/");
-  }
-});
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-app.get("/", (req, res) => {
-  res.render("home", {
+app.get("/", passiveAuth, (req, res) => {
+  // @ts-expect-error
+  console.log("req.jwt", req.jwt);
+  // @ts-expect-error
+  const isAdmin = !!req.jwt;
+
+  res.status(200).render("home", {
     layout: "hero",
     title: "School Application",
-    // isAdmin: false,
+    isAdmin,
   });
 });
-app.get("/students", (req, res) => {
+
+app.get("/students", gatedAccess, (req, res) => {
   res.render("students", {
     layout: "navigation",
     title: "Student Details",
@@ -52,7 +52,7 @@ app.get("/students", (req, res) => {
   });
 });
 
-app.get("/add-student", (req, res) => {
+app.get("/add-student", gatedAccess, (req, res) => {
   res.status(200).render("addStudents", {
     layout: "navigation",
     title: "Add Student",
@@ -61,7 +61,7 @@ app.get("/add-student", (req, res) => {
   });
 });
 
-app.get("/edit-student/:id", (req, res) => {
+app.get("/edit-student/:id", gatedAccess, (req, res) => {
   res.status(200).render("addStudents.hbs", {
     layout: "navigation",
     title: "Edit Student",
@@ -82,13 +82,12 @@ app.get("/admin-login", (req, res) => {
   });
 });
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.get("/logout", (req, res) => {
+  res.clearCookie("jwt");
+  res.redirect("/");
+});
 
 app.use("/api/admin", adminRouter);
 app.use("/api/students", studentsRouter);
-
-app.get("admin-login");
 
 app.listen("3000", () => console.log("App is running"));
