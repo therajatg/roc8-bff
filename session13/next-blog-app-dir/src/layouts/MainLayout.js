@@ -14,7 +14,7 @@ export const MainLayout = ({ children }) => {
         </ul>
       </nav>
       {children}
-      <footer>This is the footer</footer>
+      <b>This is the footer</b>
     </>
   );
 };
