@@ -1,15 +1,18 @@
+import Link from "next/link";
+
 export default async function Home() {
-  try {
-    const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-    const data = await res.json();
-    return (
-      <div>
-        {data.map((post) => (
+  const res = await fetch("http://localhost:3000/api/posts");
+  const data = await res.json();
+  return (
+    <div>
+      {data.map((post) => (
+        <>
           <p>{post.title}</p>
-        ))}
-      </div>
-    );
-  } catch (error) {
-    return <div>{error}</div>;
-  }
+          <button>
+            <Link href={`/${post.id}`}>Comments</Link>
+          </button>
+        </>
+      ))}
+    </div>
+  );
 }
