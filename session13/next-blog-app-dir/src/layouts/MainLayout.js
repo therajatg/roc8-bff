@@ -6,7 +6,10 @@ export const MainLayout = ({ children }) => {
       <nav>
         <ul>
           <li>
-            <Link href="/posts">Home</Link>
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <Link href="/new">Create Post</Link>
           </li>
           <li>
             <Link href="/about">About</Link>
